@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #id1 {
+            position: absolute;
+            top: 10%;          
+            left: 50%;         
+            transform: translateX(-50%); 
+            border: 1px solid rgb(238, 233, 233);
+            border-radius: 3%;
+            padding: 10px 10px;
+            width: 500px;
+            height: 750px;
+
+        }
+   
+        #h1 {
+            text-align: center;
+            font-family: Arial;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .labela {
+            font-family: Arial;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .input {
+            font-family: Arial;
+            font-size: 12px;
+            border: 1px solid rgb(238, 233, 233);
+            border-radius: 3px;
+            width: 100%; 
+            padding: 5px;
+            box-sizing: border-box; 
+          
+        }
+
+        .p {
+            font-family: Arial;
+            font-size: 16px;
+            font-weight: bold;
+        }
+  
+        #buttons {
+            display: flex;
+            justify-content: center; 
+            gap: 15px;
+            flex-wrap: wrap;   
+        }
+
+        .dugme {
+            color: white;
+            background-color:rgb(24, 238, 227);
+            font-family: Arial;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 1px solid rgb(238, 233, 233); 
+            padding: 5px 30px;
+            
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id = "id1">
+        <h1 id = "h1">User Management</h1>
+        <br><br>
+        <label class = "labela">First name</label>
+        <br><br>
+        <input class = "input" id = "ime" type = "text" placeholder = "Enter first name">
+        <br><br>
+        <label class = "labela"> Last name: </label>
+        <br><br>
+        <input class = "input" id = "prezime" type = "text" placeholder = "Enter last name">
+        <br><br>
+        <label class = "labela">Year of Birth</label>
+        <br><br>
+        <input class = "input" id = "godinaRodjenja" type = "text" placeholder = "Enter year of birth">
+        <br><br>
+        <label class = "labela">Height (cm): </label>
+        <br><br>
+        <input class = "input" id = "visina" type = "text" placeholder = "Etner height in cm">
+        <br><br>
+        <label class = "labela" >Weight (kg): </label>
+        <br><br>
+        <input class = "input" id = "tezina" type = "text" placeholder = "Enter weight in kg">
+        <br><br>
+        <div id = "buttons">
+            <button class = "dugme" id = "add" onclick = "add()">Add</button>
+            <button class = "dugme" id = "age" onclick = "age()">Age</button>
+            <button class = "dugme" id = "bmi" onclick = "bmi()">BMI</button>
+            <button class = "dugme" id = "delete" onclick = "izbrisi()">Delete</button>
+            <button class = "dugme" id = "sequence" onclick = "sequence()">Sequence</button>
+            <button class = "dugme" id = "prikaziSve" onclick = "prikaziSve()">Prikazi sve korisnike</button>
+            <button class = "dugme" id = "provjeri" onclick = "provjeri()">Provjeri da li postoji</button>
+            <button class = "dugme" id = "provjeriPunoljetstvo" onclick = "provjeriPunoljetstvo()">Provjeri punoljetstvo</button>
+        </div>
+        <br><br>
+        <p class = "p" id = "paragrafObicni">Results:</p>
+        <br>
+        <p class = "p" id = "rezultat"></p>
+    </div>
+    
+
+    <script>
+
+        const niz = []
+        function add() {
+            let ime = document.getElementById("ime").value.trim(); 
+            let prezime = document.getElementById("prezime").value.trim();
+            let godinaRodjenja = Number(document.getElementById("godinaRodjenja").value.trim());
+            let visina = Number(document.getElementById("visina").value.trim());
+            let tezina = Number(document.getElementById("tezina").value.trim());
+
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+
+            niz.push({
+                ime: ime,
+                prezime: prezime,
+                godinaRodjenja: godinaRodjenja,
+                visina: visina,
+                tezina: tezina
+            })
+
+            niz.sort((a,b) => a.prezime.localeCompare(b.prezime) || a.ime.localeCompare(b.ime));
+      
+            document.getElementById("ime").value = "";
+            document.getElementById("prezime").value = "";
+            document.getElementById("godinaRodjenja").value = "";
+            document.getElementById("visina").value = "";
+            document.getElementById("tezina").value = "";
+        }
+
+        function age() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime); 
+
+            if(index >= 0) {
+                let korisnikNiza = niz[index]; 
+                let godine = 2025 - korisnikNiza.godinaRodjenja;
+                document.getElementById("rezultat").innerHTML = "Pozdrav " + korisnikNiza.ime + "  " + korisnikNiza.prezime + ". Na osnovu unesene godine rodjenja, ti imas " + godine + " godina."  
+            }
+            else {
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+            
+        }
+
+        function bmi() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime);
+
+            if(index >= 0) {
+                let korisnikNiza = niz[index];
+                let BMI = (korisnikNiza.tezina / (korisnikNiza.visina **2)) * 10000
+                document.getElementById("rezultat").innerHTML = "Pozdrav " + korisnikNiza.ime + " " + korisnikNiza.prezime + ". Na osnovu tezine i visine, tvoj bmi indeks iznosi: " + BMI.toFixed(2);
+            }
+            else{
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+        }
+
+        
+        function izbrisi() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime);
+
+            if (index >= 0) {
+                let korisnikNiza = niz[index];
+                niz.splice(index, 1);
+                document.getElementById("rezultat").innerHTML = "Korisnik " + korisnikNiza.ime + " " + korisnikNiza.prezime + " je izbrisan iz baze podataka."
+            }
+            else{
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+        }
+
+        function sequence() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime);
+
+            if (index >= 0) {
+                let korisnikNiza = niz[index];
+                document.getElementById("rezultat").innerHTML = "Redni broj korisnika " + korisnikNiza.ime + " " + korisnikNiza.prezime + " je " + (index + 1) + "!";
+            }
+            else{
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+        }
+
+        function prikaziSve() {
+            if(niz.length === 0) {
+                document.getElementById("rezultat").innerHTML = "Baza podataka nema korisnika!";
+            }
+            else {
+                let ispis = "";
+                for(let i = 0; i < niz.length; i++) {
+                    ispis = ispis + "- "+ niz[i].ime + " " + niz[i].prezime + "<br>";
+                }
+                document.getElementById("rezultat").innerHTML = ispis;
+            }
+        }
+
+   
+        function provjeri() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime);
+
+            if (index >= 0) {
+                let korisnikNiza = niz[index]
+                document.getElementById("rezultat").innerHTML = "Korisnik " + korisnikNiza.ime + " " + korisnikNiza.prezime + " postoji u bazi!"
+            }
+            else{
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+        }
+
+        function provjeriPunoljetstvo() {
+            let ime = document.getElementById("ime").value.trim();
+            let prezime = document.getElementById("prezime").value.trim();
+            ime = ime.charAt(0).toUpperCase() + ime.slice(1).toLowerCase();
+            prezime = prezime.charAt(0).toUpperCase() + prezime.slice(1).toLowerCase();
+            let index = niz.findIndex(korisnik => korisnik.ime === ime && korisnik.prezime === prezime); 
+
+            if(index >= 0) {
+                let korisnikNiza = niz[index]; 
+                let godine = 2025 - korisnikNiza.godinaRodjenja;
+                if(godine >= 18) {
+                document.getElementById("rezultat").innerHTML = "Pozdrav " + korisnikNiza.ime + "  " + korisnikNiza.prezime + ". Punoljetan si jer imas " + godine + " godina."  
+                }
+                else {
+                    document.getElementById("rezultat").innerHTML = "Pozdrav " + korisnikNiza.ime + "  " + korisnikNiza.prezime + ". Nisi punoljetan jer imas " + godine + " godina."
+                }
+            }
+            else {
+                document.getElementById("rezultat").innerHTML = "Korisnik nije u bazi!";
+            }
+        }
+
+
+    </script>
+</body>
+</html>
